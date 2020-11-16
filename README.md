@@ -71,6 +71,16 @@ function updateValue($token, $value, $update){ //define values you need in this 
     }
 }
 ```
+And in **api/index.php** add our new function:
+```php
+$values = $json['values'];
+    switch($json['operation']){
+        case 'info': return info($json['values']);
+        case 'echo': return response($json['values'], 'echo');
+        case 'updateValue': return updateValue($values['token'], $values['value'], $values['update']); //new function with values
+        case 'listUsers': return listUsers($json['values']);
+...
+```
 
 Server success response:
 ```json

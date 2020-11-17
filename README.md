@@ -5,7 +5,7 @@
 You need php and mySQL server. To set up mySQL users table for api just use this command:
 
 ```mysql
-CREATE TABLE data (
+CREATE TABLE users (
 	id int  NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	username varchar(32)  NOT NULL,
 	password text  NOT NULL,
@@ -25,7 +25,7 @@ Next copy files from folder api to folder on your server, for example I use fold
   define('username', '_username_value_'); //put username of your mysql database instead of "_username_value_"
   define('password', '_password_value_'); //put password of your mysql database instead of "_password_value_"
   define('host', 'localhost'); //default value, change if you know what you change
-  define('name', '_table_name_value_'); //put your table name from your mysql database instead of "_table_name_value_"
+  define('name', '_database_name_value_'); //put your table name from your mysql database instead of "_table_name_value_"
   
   define('key', '_key_value_'); //put your custom key instead of "_key_value_" so that no body could gain access to your api
   ...
@@ -71,6 +71,16 @@ function updateValue($token, $value, $update){ //define values you need in this 
     }
 }
 ```
+And in **api/index.php** add our new function:
+```php
+$values = $json['values'];
+    switch($json['operation']){
+        case 'info': return info($json['values']);
+        case 'echo': return response($json['values'], 'echo');
+        case 'updateValue': return updateValue($values['token'], $values['value'], $values['update']); //new function with values
+        case 'listUsers': return listUsers($json['values']);
+...
+```
 
 Server success response:
 ```json
@@ -106,4 +116,16 @@ And server side is done! You can check it with [rest api post checker](https://r
 <img src=https://raw.githubusercontent.com/purpln/purpln/main/images/api2.png>
 
 ### iOS app setup
+App features:
+- UI programmatically 
+- UICollection and UITable programmatically 
+- UICollection and UITable cells
+- iOS 10 to iOS 14 support (iPhone 5 to iPhone 12)
+- Custom php REST Api
+- Search bar
+- Custom navbar
+- iPad master and detail view support 
+- Classes of elements
+- Server UTC time to local
+
 In my app example you can find **api.swift** file

@@ -42,7 +42,7 @@ class SetUpNameViewController: UIViewController, UITextFieldDelegate{
     var name:String = ""
     @objc func load(){
         name = NameTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
-        api.values(.updateValue, ["token":defaults.token, "value":"name", "update":name]){result in
+        api.values(.updateValue, ["token":userToken(), "value":"name", "update":name]){result in
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .formatted(apiDate)
             if let json = try? decoder.decode(actionString.self, from: result) {

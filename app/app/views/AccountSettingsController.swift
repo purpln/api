@@ -10,7 +10,6 @@ import UIKit
 class AccountSettingsController: UIViewController{
     var tableView:UITableView!
     let refreshControl = UIRefreshControl(frame: CGRect.zero)
-    let Label = appLabel(text: defaults.token, color: .systemBlue, alpha: 1)
     let api = restapi()
     let padding: CGFloat = 20
     var results:[type] = []
@@ -55,7 +54,7 @@ class AccountSettingsController: UIViewController{
     }
     
     @objc func load(){
-        api.value(.getUserByToken, defaults.token){result in
+        api.value(.getUserByToken, userToken()){result in
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .formatted(apiDate)
             if let json = try? decoder.decode(actionUserByToken.self, from: result) {

@@ -65,20 +65,17 @@ extension SetUpColorViewController:UICollectionViewDataSource, UICollectionViewD
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath){
-        api.values(.updateValue, ["token":defaults.token, "value":"color", "update":indexPath.row]){result in
+        api.values(.updateValue, ["token":userToken(), "value":"color", "update":indexPath.row]){result in
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .formatted(apiDate)
             if let json = try? decoder.decode(actionString.self, from: result) {
                 DispatchQueue.main.async{
                     information = json.info
-                    print("f")
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: "load"), object: nil)
                 }
             }else if let json = try? decoder.decode(actionError.self, from: result) {
                 DispatchQueue.main.async{
                     information = json.info
-                    print(information.data)
-                    print(String(data: result, encoding: String.Encoding.utf8)!)
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: "load"), object: nil)
                 }
             }else{

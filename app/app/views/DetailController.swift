@@ -62,7 +62,7 @@ class DetailController: UIViewController{
     }
     
     func load(){
-        api.values(.getUserByUsername, ["token":defaults.token, "username":username]){ result in
+        api.values(.getUserByUsername, ["token":userToken(), "username":username]){ result in
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .formatted(apiDate)
             if let json = try? decoder.decode(actionUserByUsername.self, from: result) {

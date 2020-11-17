@@ -15,12 +15,14 @@ class MasterController: UIViewController{
     var results:[actionListUsers.values] = []
     var api = restapi()
     let padding:CGFloat = 20
+    let defaults = UserDefaults.standard
     
     override func viewWillAppear(_ animated: Bool){
         super.viewWillAppear(animated)
         if auth(){
             load()
         }
+        loadColors()
     }
     
     override func viewDidLayoutSubviews(){
@@ -31,7 +33,6 @@ class MasterController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(load), name: NSNotification.Name(rawValue: "load"), object: nil)
-        loadColors()
         view()
         hideKeyboardWhenTappedAround()
     }
@@ -90,7 +91,7 @@ class MasterController: UIViewController{
     }
     
     @objc func load(){
-        api.value(.listUsers, defaults.token){result in
+        api.value(.listUsers, userToken()){result in
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .formatted(apiDate)
             if let json = try? decoder.decode(actionListUsers.self, from: result) {
@@ -111,7 +112,7 @@ class MasterController: UIViewController{
     }
     
     func auth()->Bool{
-        if defaults.token == ""{
+        if userToken() == ""{
             let controller = UINavigationController(rootViewController: LogInViewController())
             if #available(iOS 13.0, *) {
                 controller.isModalInPresentation = true
@@ -131,6 +132,7 @@ class MasterController: UIViewController{
                     DispatchQueue.main.async{
                         colors = json.values
                         information = json.info
+                        self.load()
                     }
                 }else if let json = try? decoder.decode(actionError.self, from: result) {
                     DispatchQueue.main.async{
@@ -145,7 +147,7 @@ class MasterController: UIViewController{
     }
     
     func logOut(){
-        defaults.token = ""
+        self.defaults.set(nil, forKey:"token")
         if auth(){
             load()
         }
@@ -172,7 +174,7 @@ extension MasterController:UICollectionViewDataSource, UICollectionViewDelegate{
         } else {
             search = results[indexPath.row]
         }
-        cell.Label.backgroundColor = UIColor(hex: colors[Int(search.color) ?? 1].hex)
+        cell.Label.backgroundColor = UIColor(hex: colors[Int(search.color) ?? 0].hex)
         cell.Label.text = search.username
         return cell
     }

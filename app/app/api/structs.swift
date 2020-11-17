@@ -7,10 +7,6 @@
 
 import UIKit
 
-struct defaults:Codable{
-    static var token:String = ""
-}
-
 struct Info:Codable{
     var api:String
     var version:String

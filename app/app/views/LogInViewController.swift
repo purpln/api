@@ -15,6 +15,7 @@ class LogInViewController: UIViewController{
     let ErrorLabel = appLabel(text: "", color: .systemRed, alpha: 0)
     let api = restapi()
     let padding:CGFloat = 20
+    let defaults = UserDefaults.standard
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,7 +74,7 @@ class LogInViewController: UIViewController{
             decoder.dateDecodingStrategy = .formatted(apiDate)
             if let json = try? decoder.decode(actionString.self, from: result) {
                 DispatchQueue.main.async{
-                    defaults.token = json.values
+                    self.defaults.set(json.values, forKey:"token")
                     information = json.info
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: "load"), object: nil)
                     self.dismissController()

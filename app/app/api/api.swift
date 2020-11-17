@@ -7,6 +7,11 @@
 
 import Foundation
 
+func userToken() -> String {
+    let str = UserDefaults.standard.object(forKey: "token") as? String
+    return str == nil ? "" : str!
+}
+
 var information:Info = Info(api: "", version: "", description: "", error: false, data: "", seed: "")
 var colors = [actionColors.values]()
 

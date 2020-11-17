@@ -1,4 +1,26 @@
 # Simple php-json rest api with iOS UIKit Example
+
+<img src=https://raw.githubusercontent.com/purpln/purpln/main/images/api4.png>
+
+<img src=https://raw.githubusercontent.com/purpln/purpln/main/images/api3.png>
+
+<img src=https://raw.githubusercontent.com/purpln/purpln/main/images/api5.png>
+
+<img src=https://raw.githubusercontent.com/purpln/purpln/main/images/api6.png>
+
+App features:
+- UI programmatically 
+- UICollection and UITable programmatically 
+- UICollection and UITable cells
+- iOS 10 to iOS 14 support (iPhone 5 to iPhone 12)
+- Custom php REST Api
+- Search bar
+- Custom navbar
+- iPad master and detail view support 
+- Classes of elements
+- Server UTC time to local
+- Server hex color to rgba UICololr
+
 ## Instructions:
 
 ### Server side setup
@@ -116,16 +138,43 @@ And server side is done! You can check it with [rest api post checker](https://r
 <img src=https://raw.githubusercontent.com/purpln/purpln/main/images/api2.png>
 
 ### iOS app setup
-App features:
-- UI programmatically 
-- UICollection and UITable programmatically 
-- UICollection and UITable cells
-- iOS 10 to iOS 14 support (iPhone 5 to iPhone 12)
-- Custom php REST Api
-- Search bar
-- Custom navbar
-- iPad master and detail view support 
-- Classes of elements
-- Server UTC time to local
 
-In my app example you can find **api.swift** file
+In my app example you can find **app/api/api.swift** file, where you need to setup your api
+
+```swift
+let key:String = "_key_value_" //key you defined on your server
+let url:String = "https://example.com/test/" //link to api folder on your server
+```
+
+Simple function, that POST on server value "Sergey Romanenko" to update name of the user with the token that stored in defaults.token struct:
+```swift
+let api = restapi() //name of the class
+
+api.values(.updateValue, ["token":defaults.token, "value":"name", "update":"Sergey Romanenko"]){result in
+    let decoder = JSONDecoder()
+    decoder.dateDecodingStrategy = .formatted(apiDate)
+    if let json = try? decoder.decode(actionString.self, from: result) {
+        DispatchQueue.main.async{
+            information = json.info
+            self.showError(information.data, information.error)
+        }
+    }else if let json = try? decoder.decode(actionError.self, from: result) {
+        DispatchQueue.main.async{
+            information = json.info
+            self.showError(information.data, information.error)
+        }
+    }else{
+        print(String(data: result, encoding: String.Encoding.utf8)!)
+    }
+}
+```
+This function returns server response. It tries to decode response, if some error occurred it tries to decode it second time, but if something is actually wrong function print the body of server's response to the console.
+
+To send one value use this function:
+```swift
+api.value(.updateValue, "_value_")
+```
+In function you can see ".updateValue" - this is a definition of operation server need to do. This operations also defined in **app/api/api.swift** file, you can append the enum "operations", if you created some new action on server side.
+Structs that decode server's response are in **app/api/structs.swift** file. There are two basic structs ("actionString" and "actionError") that decodes most of responses.
+
+### That's it. Basic work of my api and app

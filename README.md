@@ -5,7 +5,7 @@
 You need php and mySQL server. To set up mySQL users table for api just use this command:
 
 ```mysql
-CREATE TABLE data (
+CREATE TABLE users (
 	id int  NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	username varchar(32)  NOT NULL,
 	password text  NOT NULL,
@@ -126,5 +126,6 @@ App features:
 - Custom navbar
 - iPad master and detail view support 
 - Classes of elements
+- Server UTC time to local
 
 In my app example you can find **api.swift** file

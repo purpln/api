@@ -5,7 +5,7 @@
 //  Created by Sergey Romanenko on 12.11.2020.
 //
 
-import UIKit
+import Foundation
 
 struct Info:Codable{
     var api:String
